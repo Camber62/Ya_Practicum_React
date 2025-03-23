@@ -5,11 +5,12 @@ import {BurgerIngredientsProps, Ingredient} from "../../types";
 import IngredientCard from "@components/burger-ingredients/ingredient-card";
 import IngredientDetails from "@components/ingredient-details/ingredient-details";
 import Modal from "@components/modal/modal";
+import {useModal} from "../../hooks/useModal";
 
 const BurgerIngredients: React.FC<BurgerIngredientsProps> = ({ ingredients, selectedIngredients }) => {
 	const [currentTab, setCurrentTab] = useState<string>('bun');
-	const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 	const [selectedIngredient, setSelectedIngredient] = useState<Ingredient | null>(null);
+	const { isModalOpen, openModal, closeModal } = useModal();
 
 	const buns = ingredients.filter((item) => item.type === 'bun');
 	const sauces = ingredients.filter((item) => item.type === 'sauce');
@@ -25,11 +26,11 @@ const BurgerIngredients: React.FC<BurgerIngredientsProps> = ({ ingredients, sele
 
 	const handleOpenModal = (ingredient: Ingredient) => {
 		setSelectedIngredient(ingredient);
-		setIsModalOpen(true);
+		openModal();
 	};
 
 	const handleCloseModal = () => {
-		setIsModalOpen(false);
+		closeModal();
 		setSelectedIngredient(null);
 	};
 

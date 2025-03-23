@@ -87,9 +87,7 @@ export const App: React.FC = () => {
 	return (
 		<DndProvider backend={HTML5Backend}>
 			<div className="page">
-				<header>
-					<Header/>
-				</header>
+				<Header/>
 				{isLoading ? (
 					<div className={styles.loaderContainer}>
 						<div className={styles.loader}></div>

@@ -1,4 +1,4 @@
-import React, {FC, useState} from 'react';
+import React, {FC} from 'react';
 import styles from './burger-constructor.module.scss';
 import {Button, ConstructorElement, CurrencyIcon} from '@ya.praktikum/react-developer-burger-ui-components';
 import {useDrop} from 'react-dnd';
@@ -6,6 +6,7 @@ import DraggableFilling from "../../hooks/useDraggableFilling";
 import {Ingredient, SelectedIngredient} from "../../types";
 import OrderDetails from "@components/ingredient-details/order-details";
 import Modal from "@components/modal/modal";
+import {useModal} from "../../hooks/useModal";
 
 
 interface BurgerConstructorProps {
@@ -21,15 +22,13 @@ const ItemTypes = {
 };
 
 
-// Компонент конструктора бургера с поддержкой Drag-and-Drop
 const BurgerConstructor: FC<BurgerConstructorProps> = ({
 														   selectedIngredients = [],
 														   onAddIngredient,
 														   onRemoveIngredient,
 														   onMoveIngredient
 													   }) => {
-	const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-
+	const { isModalOpen, openModal, closeModal } = useModal();
 	// Разделение ингредиентов на булочки и начинки
 	const buns = selectedIngredients.filter((item) => item.type === 'bun');
 	const topBun = buns.length > 0 ? buns[0] : undefined;
@@ -45,8 +44,7 @@ const BurgerConstructor: FC<BurgerConstructorProps> = ({
 		drop: (item: Ingredient) => onAddIngredient(item),
 	}));
 
-	const handleOpenModal = () => setIsModalOpen(true);
-	const handleCloseModal = () => setIsModalOpen(false);
+
 
 	return (
 		<section className={styles.burgerConstructor} ref={drop}>
@@ -98,15 +96,15 @@ const BurgerConstructor: FC<BurgerConstructorProps> = ({
 					<span className="text text_type_digits-medium mr-2">{totalPrice}</span>
 					<CurrencyIcon type="primary"/>
 				</div>
-				<Button htmlType="button" type="primary" size="large" onClick={handleOpenModal}>
+				<Button htmlType="button" type="primary" size="large" onClick={openModal}>
 					Оформить заказ
 				</Button>
 			</footer>
 
 			{/* Модальное окно с деталями заказа */}
 			{isModalOpen && (
-				<Modal onClose={handleCloseModal}>
-					<OrderDetails/>
+				<Modal onClose={closeModal}>
+					<OrderDetails />
 				</Modal>
 			)}
 		</section>
