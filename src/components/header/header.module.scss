@@ -1,0 +1,38 @@
+.header {
+	background-color: #1c2526;
+	width: 100%;
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 1000;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.nav {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	max-width: 1280px;
+	margin: 0 auto;
+	position: relative;
+}
+
+.navLeft {
+	display: flex;
+	align-items: center;
+}
+
+.navItem {
+	display: flex;
+	align-items: center;
+}
+
+.logo {
+	position: absolute;
+	left: 50%;
+	transform: translateX(-50%);
+}
+
+.activeText {
+	color: #ffffff;
+}

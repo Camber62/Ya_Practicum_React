@@ -1,0 +1,73 @@
+.burgerConstructor {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	max-width: 600px;
+	margin: 0 auto;
+	padding: 20px;
+}
+
+.fillingsList {
+	overflow-y: auto;
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+
+.fillingsList::-webkit-scrollbar {
+	width: 8px;
+}
+
+.fillingsList::-webkit-scrollbar-track {
+	background: #2f2f37;
+}
+
+.fillingsList::-webkit-scrollbar-thumb {
+	background: #8585ad;
+}
+
+.fillingItem {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+.footer {
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+}
+
+.totalPrice {
+	display: flex;
+	align-items: center;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+	.burgerConstructor {
+		padding: 10px;
+	}
+
+	.fillingsList {
+		max-height: 200px;
+	}
+}
+
+@media (max-width: 480px) {
+	.fillingsList {
+		max-height: 150px;
+	}
+
+	.footer {
+		flex-direction: column;
+		gap: 10px;
+	}
+
+	.totalPrice {
+		justify-content: center;
+	}
+}
