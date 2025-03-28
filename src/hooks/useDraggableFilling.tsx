@@ -3,12 +3,10 @@ import { useDrag, useDrop } from 'react-dnd';
 import { ConstructorElement, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { SelectedIngredient } from '../types';
 
-// Константа для типа перетаскиваемого элемента
 const ItemTypes = {
 	FILLING: 'filling',
 };
 
-// Компонент для перетаскиваемой начинки
 const DraggableFilling: FC<{
 	item: SelectedIngredient;
 	index: number;
@@ -17,7 +15,6 @@ const DraggableFilling: FC<{
 }> = ({ item, index, onMove, onRemove }) => {
 	const ref = useRef<HTMLLIElement>(null);
 
-	// Настройка drag-and-drop
 	const [{ isDragging }, drag] = useDrag({
 		type: ItemTypes.FILLING,
 		item: { index },
@@ -29,15 +26,13 @@ const DraggableFilling: FC<{
 	const [, drop] = useDrop({
 		accept: ItemTypes.FILLING,
 		hover: (draggedItem: { index: number }) => {
-			// Пропускаем, если элемент перетаскивается на самого себя
 			if (draggedItem.index !== index) {
 				onMove(draggedItem.index, index);
-				draggedItem.index = index; // Обновляем индекс перетаскиваемого элемента
+				draggedItem.index = index;
 			}
 		},
 	});
 
-	// Привязываем drag и drop к одному ref
 	drag(drop(ref));
 
 	return (

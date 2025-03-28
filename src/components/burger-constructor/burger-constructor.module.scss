@@ -42,8 +42,38 @@
 }
 
 .totalPrice {
+	margin-right: 10px;
 	display: flex;
 	align-items: center;
+}
+
+.placeholder {
+	width: 536px;
+	max-width: 100%;
+	margin: 0 auto;
+	height: 80px;
+	background: #1c1c21;
+	border: 2px dashed #8585ad;
+	border-radius: 40px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: #8585ad;
+	box-sizing: border-box;
+}
+
+.placeholderActive {
+	border: 2px dashed #4c4cff;
+}
+
+.placeholderTop {
+	border-bottom-left-radius: 0;
+	border-bottom-right-radius: 0;
+}
+
+.placeholderBottom {
+	border-top-left-radius: 0;
+	border-top-right-radius: 0;
 }
 
 /* Адаптивность */
@@ -54,6 +84,11 @@
 
 	.fillingsList {
 		max-height: 200px;
+	}
+
+	.placeholder {
+		width: 100%;
+		padding: 0 16px;
 	}
 }
 

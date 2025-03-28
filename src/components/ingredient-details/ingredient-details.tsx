@@ -1,9 +1,13 @@
 import React, { FC } from 'react';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
 import styles from './ingredient-details.module.scss';
-import {IngredientDetailsProps} from "../../types";
 
+const IngredientDetails: FC = () => {
+	const ingredient = useSelector((state: RootState) => state.app.selectedIngredient);
 
-const IngredientDetails: FC<IngredientDetailsProps> = ({ ingredient }) => {
+	if (!ingredient) return null;
+
 	return (
 		<div className={styles.container}>
 			<img src={ingredient.image_large} alt={ingredient.name} className={styles.image} />
