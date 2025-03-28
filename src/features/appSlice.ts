@@ -17,7 +17,7 @@ export const createOrder = createAsyncThunk(
 	"appSlice/createOrder",
 	async (ingredientIds: string[], { rejectWithValue }) => {
 		try {
-			return await API.createOrderApi(ingredientIds);
+			return await API.createOrder(ingredientIds);
 		} catch (error) {
 			return rejectWithValue("Не удалось создать заказ");
 		}
