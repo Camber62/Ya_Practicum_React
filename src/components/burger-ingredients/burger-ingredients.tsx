@@ -1,33 +1,40 @@
 import React, { FC, useRef, useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../../store';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '../../store';
 import styles from './burger-ingredients.module.scss';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
-import { BurgerIngredientsProps, Ingredient } from '../../types';
+import { Ingredient } from '../../types';
 import IngredientCard from './ingredient-card';
 import IngredientDetails from '@components/ingredient-details/ingredient-details';
 import Modal from '@components/modal/modal';
 import { useModal } from '../../hooks/useModal';
-import { setSelectedIngredient } from '../../features/appSlice';
+import { setSelectedIngredient, addIngredientToConstructor } from '../../features/appSlice';
 
-const BurgerIngredients: FC<BurgerIngredientsProps> = ({
-														   ingredients,
-														   selectedIngredients,
-														   onAddIngredient,
-													   }) => {
+const BurgerIngredients: FC = () => {
 	const dispatch = useDispatch<AppDispatch>();
 	const { isModalOpen, openModal, closeModal } = useModal();
 	const [currentTab, setCurrentTab] = useState<string>('bun');
 
+	// Получение данных из Redux store
+	const { ingredients, constructorData } = useSelector((state: RootState) => state.app);
+
+	// Рефы для отслеживания позиций секций при скролле
 	const bunRef = useRef<HTMLHeadingElement>(null);
 	const sauceRef = useRef<HTMLHeadingElement>(null);
 	const mainRef = useRef<HTMLHeadingElement>(null);
 	const scrollContainerRef = useRef<HTMLDivElement>(null);
 
+	// Фильтрация ингредиентов по типам
 	const buns = ingredients.filter((item) => item.type === 'bun');
 	const sauces = ingredients.filter((item) => item.type === 'sauce');
 	const mains = ingredients.filter((item) => item.type === 'main');
 
+	// Формирование массива выбранных ингредиентов с учетом булок
+	const selectedIngredients = constructorData.bun
+		? [constructorData.bun, ...constructorData.ingredients, constructorData.bun]
+		: constructorData.ingredients;
+
+	// Подсчет количества каждого ингредиента в конструкторе
 	const counters = selectedIngredients.reduce((acc, item) => {
 		acc[item._id] = (acc[item._id] || 0) + 1;
 		return acc;
@@ -43,6 +50,21 @@ const BurgerIngredients: FC<BurgerIngredientsProps> = ({
 		dispatch(setSelectedIngredient(null));
 	};
 
+	// Обработчик добавления ингредиента в конструктор
+	const handleAddIngredient = (ingredient: Ingredient) => {
+		const newIngredient = {
+			...ingredient,
+			uniqueId: `${ingredient._id}-${Date.now()}`
+		};
+		const isAlreadyAdded = constructorData.ingredients.some(
+			item => item._id === newIngredient._id && item.uniqueId === newIngredient.uniqueId
+		);
+		if (!isAlreadyAdded || ingredient.type === 'bun') {
+			dispatch(addIngredientToConstructor(newIngredient));
+		}
+	};
+
+	// Обработчик переключения табов
 	const handleTabClick = (value: string) => {
 		setCurrentTab(value);
 		const ref = value === 'bun' ? bunRef : value === 'sauce' ? sauceRef : mainRef;
@@ -110,7 +132,7 @@ const BurgerIngredients: FC<BurgerIngredientsProps> = ({
 								ingredient={item}
 								count={counters[item._id] || 0}
 								onClick={handleOpenModal}
-								onAdd={onAddIngredient}
+								onAdd={handleAddIngredient}
 							/>
 						))}
 					</ul>
@@ -127,7 +149,7 @@ const BurgerIngredients: FC<BurgerIngredientsProps> = ({
 								ingredient={item}
 								count={counters[item._id] || 0}
 								onClick={handleOpenModal}
-								onAdd={onAddIngredient}
+								onAdd={handleAddIngredient}
 							/>
 						))}
 					</ul>
@@ -144,7 +166,7 @@ const BurgerIngredients: FC<BurgerIngredientsProps> = ({
 								ingredient={item}
 								count={counters[item._id] || 0}
 								onClick={handleOpenModal}
-								onAdd={onAddIngredient}
+								onAdd={handleAddIngredient}
 							/>
 						))}
 					</ul>

@@ -1,13 +1,12 @@
 import React, { FC } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../store';
-import { AppDispatch } from '../../store';
-import { createOrder, clearConstructor } from '../../features/appSlice';
+import { RootState, AppDispatch } from '../../store';
+import { createOrder, clearConstructor, removeIngredientFromConstructor, moveIngredientInConstructor, addIngredientToConstructor } from '../../features/appSlice';
 import styles from './burger-constructor.module.scss';
 import { Button, ConstructorElement, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useDrop, useDragLayer } from 'react-dnd';
 import DraggableFilling from '../../hooks/useDraggableFilling';
-import { BurgerConstructorProps, Ingredient } from '../../types';
+import { Ingredient } from '../../types';
 import OrderDetails from '@components/ingredient-details/order-details';
 import Modal from '@components/modal/modal';
 import { useModal } from '../../hooks/useModal';
@@ -17,28 +16,45 @@ const ItemTypes = {
 	FILLING: 'filling',
 };
 
-const BurgerConstructor: FC<BurgerConstructorProps> = ({
-														   selectedIngredients,
-														   onAddIngredient,
-														   onRemoveIngredient,
-														   onMoveIngredient,
-													   }) => {
+const BurgerConstructor: FC = () => {
 	const dispatch = useDispatch<AppDispatch>();
-	const { order, orderStatus } = useSelector((state: RootState) => state.app);
+	const { order, orderStatus, constructorData } = useSelector((state: RootState) => state.app);
 	const { isModalOpen, openModal, closeModal } = useModal();
 
+	/**
+	 * Формирование массива выбранных ингредиентов с учетом булок.
+	 * Если булка выбрана, она добавляется в начало и конец массива.
+	 */
+	const selectedIngredients = constructorData.bun
+		? [constructorData.bun, ...constructorData.ingredients, constructorData.bun]
+		: constructorData.ingredients;
+
+	// Разделение ингредиентов на булки и начинки
 	const buns = selectedIngredients.filter((item) => item.type === 'bun');
 	const topBun = buns.length > 0 ? buns[0] : undefined;
 	const bottomBun = buns.length > 1 ? buns[buns.length - 1] : topBun;
 	const fillings = selectedIngredients.filter((item) => item.type !== 'bun');
 
+	// Подсчет общей стоимости бургера
 	const totalPrice = selectedIngredients.reduce((sum, item) => sum + item.price, 0);
 
-	// Хук useDrop для всей секции конструктора
+	/**
+	 * Настройка функциональности drag-and-drop для добавления ингредиентов.
+	 * При перетаскивании ингредиента в конструктор создается его копия с уникальным ID.
+	 */
 	const [, drop] = useDrop(() => ({
 		accept: ItemTypes.INGREDIENT,
 		drop: (item: Ingredient) => {
-			onAddIngredient(item);
+			const newIngredient = {
+				...item,
+				uniqueId: `${item._id}-${Date.now()}`
+			};
+			const isAlreadyAdded = constructorData.ingredients.some(
+				existingItem => existingItem._id === newIngredient._id && existingItem.uniqueId === newIngredient.uniqueId
+			);
+			if (!isAlreadyAdded || item.type === 'bun') {
+				dispatch(addIngredientToConstructor(newIngredient));
+			}
 		},
 	}));
 
@@ -63,6 +79,21 @@ const BurgerConstructor: FC<BurgerConstructorProps> = ({
 			dispatch(clearConstructor());
 		}
 		closeModal();
+	};
+
+	const handleRemoveIngredient = (index: number) => {
+		if (index !== 0 && index !== selectedIngredients.length - 1) {
+			const fillingIndex = index - 1;
+			dispatch(removeIngredientFromConstructor(fillingIndex));
+		}
+	};
+
+	const handleMoveIngredient = (dragIndex: number, hoverIndex: number) => {
+		const fillingDragIndex = dragIndex - 1;
+		const fillingHoverIndex = hoverIndex - 1;
+		if (fillingDragIndex >= 0 && fillingHoverIndex >= 0) {
+			dispatch(moveIngredientInConstructor({ dragIndex: fillingDragIndex, hoverIndex: fillingHoverIndex }));
+		}
 	};
 
 	return (
@@ -96,10 +127,10 @@ const BurgerConstructor: FC<BurgerConstructorProps> = ({
 							key={item.uniqueId}
 							item={item}
 							index={index + 1}
-							onMove={onMoveIngredient}
+							onMove={handleMoveIngredient}
 							onRemove={() => {
 								const actualIndex = selectedIngredients.findIndex((i) => i.uniqueId === item.uniqueId);
-								onRemoveIngredient(actualIndex);
+								handleRemoveIngredient(actualIndex);
 							}}
 						/>
 					))
@@ -135,6 +166,7 @@ const BurgerConstructor: FC<BurgerConstructorProps> = ({
 				)}
 			</div>
 
+			{/* Футер с ценой и кнопкой оформления */}
 			<footer className={styles.footer}>
 				<div className={styles.totalPrice}>
 					<span className="text text_type_digits-medium mr-2">{totalPrice}</span>
