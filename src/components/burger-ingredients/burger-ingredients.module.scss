@@ -1,0 +1,39 @@
+/* Контейнер для списка ингредиентов */
+.ingredients {
+	max-width: 600px;
+	margin: 0 auto;
+}
+
+/* Навигационные табы */
+.tabs {
+	display: flex;
+}
+
+/* Контейнер с прокруткой для списка ингредиентов */
+.scrollContainer {
+	max-height: 664px; /* Ограничение высоты для прокрутки */
+	overflow-y: auto;
+}
+
+/* Стили для прокрутки */
+.scrollContainer::-webkit-scrollbar {
+	width: 8px;
+}
+
+.scrollContainer::-webkit-scrollbar-track {
+	background: #2f2f37;
+}
+
+.scrollContainer::-webkit-scrollbar-thumb {
+	background: #8585ad;
+}
+
+/* Сетка для карточек ингредиентов */
+.grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(272px, 1fr));
+	gap: 24px;
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}

@@ -1,36 +1,54 @@
-import { clsx } from 'clsx';
-import { useState } from 'react';
-import s from './app.module.scss';
-import reactLogo from './assets/react.svg';
-import { ReactComponent as TypescriptLogo } from './assets/typescript.svg';
-import { add } from '@utils/one';
-import { AppHeader } from '@components/app-header/app-header';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import {AppDispatch, RootState} from '../store';
+import { fetchIngredients } from '../features/appSlice';
+import Header from '@components/header/header';
+import styles from './app.module.scss';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
+import BurgerIngredients from '@components/burger-ingredients/burger-ingredients';
+import BurgerConstructor from '@components/burger-constructor/burger-constructor';
 
-export const App = () => {
-	// const num = 0
-	const [count, setCount] = useState(0);
+export const App: React.FC = () => {
+	const dispatch = useDispatch<AppDispatch>();
+	const {
+		ingredientsStatus,
+		ingredientsError,
+	} = useSelector((state: RootState) => state.app);
+
+	useEffect(() => {
+		dispatch(fetchIngredients());
+	}, [dispatch]);
+
+	const isLoading = ingredientsStatus === 'pending';
+	const error = ingredientsError;
 
 	return (
-		<div className='page'>
-			<AppHeader />
-			<div className='logo-wrapper'>
-				<a href='https://reactjs.org' target='_blank' rel='noreferrer'>
-					<img
-						src={reactLogo}
-						className={clsx(s.logo, s.react)}
-						alt={`React logo ${add(2, 5)}`}
-					/>
-				</a>
-				<a href='https://vitejs.dev' target='_blank' rel='noreferrer'>
-					<TypescriptLogo className={s.logo} />
-				</a>
+		<DndProvider backend={HTML5Backend}>
+			<div className="page">
+				<Header />
+				{isLoading ? (
+					<div className={styles.loaderContainer}>
+						<div className={styles.loader}></div>
+						<p className="text text_type_main-medium">Загрузка...</p>
+					</div>
+				) : error ? (
+					<div className={styles.errorContainer}>
+						<p className="text text_type_main-medium text_color_error">{error}</p>
+					</div>
+				) : (
+					<main className={styles.main}>
+						<section>
+							<BurgerIngredients />
+						</section>
+						<section>
+							<BurgerConstructor />
+						</section>
+					</main>
+				)}
 			</div>
-			<h1>React + TS</h1>
-			<div className={s.card}>
-				<button onClick={() => setCount((count) => count + 1)}>
-					count is {count}
-				</button>
-			</div>
-		</div>
+		</DndProvider>
 	);
 };
+
+export default App;
