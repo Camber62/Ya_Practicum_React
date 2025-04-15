@@ -2,38 +2,56 @@
 .ingredients {
 	max-width: 600px;
 	margin: 0 auto;
-}
-
-/* Навигационные табы */
-.tabs {
+  }
+  
+  /* Навигационные табы */
+  .tabs {
 	display: flex;
-}
-
-/* Контейнер с прокруткой для списка ингредиентов */
-.scrollContainer {
+  }
+  
+  /* Контейнер с прокруткой для списка ингредиентов */
+  .scrollContainer {
 	max-height: 664px; /* Ограничение высоты для прокрутки */
 	overflow-y: auto;
-}
-
-/* Стили для прокрутки */
-.scrollContainer::-webkit-scrollbar {
-	width: 8px;
-}
-
-.scrollContainer::-webkit-scrollbar-track {
-	background: #2f2f37;
-}
-
-.scrollContainer::-webkit-scrollbar-thumb {
-	background: #8585ad;
-}
-
-/* Сетка для карточек ингредиентов */
-.grid {
+  }
+  
+  /* Стили для прокрутки (Webkit-браузеры: Chrome, Safari) */
+  .scrollContainer::-webkit-scrollbar {
+	width: 8px; /* Ширина скроллбара */
+  }
+  
+  .scrollContainer::-webkit-scrollbar-track {
+	background: transparent; /* Прозрачный фон трека, как на скриншоте */
+  }
+  
+  .scrollContainer::-webkit-scrollbar-thumb {
+	background: #8585ad; /* Цвет ползунка */
+	border-radius: 8px; /* Закруглённые края */
+  }
+  
+  /* Стили для Firefox */
+  .scrollContainer {
+	scrollbar-width: thin; /* Тонкий скроллбар */
+	scrollbar-color: #8585ad transparent; /* Цвет ползунка и трека */
+  }
+  
+  /* Сетка для карточек ингредиентов */
+  .grid {
 	display: grid;
 	grid-template-columns: repeat(auto-fill, minmax(272px, 1fr));
 	gap: 24px;
 	list-style: none;
 	padding: 0;
 	margin: 0;
-}
+  }
+  
+  /* Адаптивность */
+  @media (max-width: 768px) {
+	.scrollContainer {
+	  max-height: 400px; /* Уменьшаем высоту на меньших экранах */
+	}
+  
+	.grid {
+	  grid-template-columns: 1fr; /* Одна колонка на маленьких экранах */
+	}
+  }

@@ -1,7 +1,16 @@
-import { getIngredients } from "./get-ingredients";
-import {createOrder} from "./create_order";
+import { getIngredients } from './ingredients';
+import { placeOrder } from './orders';
+import { register, login, forgotPassword, resetPassword, updateProfile, getUser, logout, refreshToken } from './auth';
 
 export const API = {
-	createOrder,
-	getIngredients
+  getIngredients,
+  createOrder: placeOrder,
+  register,
+  login,
+  forgotPassword,
+  resetPassword,
+  updateProfile,
+  getUser,
+  logout,
+  refreshToken,
 };
