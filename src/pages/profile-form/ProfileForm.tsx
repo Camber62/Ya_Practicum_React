@@ -60,6 +60,7 @@ export const ProfileForm: React.FC = () => {
         name="name"
         icon="EditIcon"
         extraClass={styles.input}
+        autoComplete="name"
       />
       <Input
         type="email"
@@ -69,6 +70,7 @@ export const ProfileForm: React.FC = () => {
         name="email"
         icon="EditIcon"
         extraClass={styles.input}
+        autoComplete="email"
       />
       <PasswordInput
         onChange={onPasswordChange}
@@ -77,6 +79,7 @@ export const ProfileForm: React.FC = () => {
         placeholder="Пароль"
         icon="EditIcon"
         extraClass={styles.input}
+        autoComplete="new-password"
       />
       {authStatus === 'failed' && <p className={styles.error}>{authError}</p>}
       {isFormChanged && (

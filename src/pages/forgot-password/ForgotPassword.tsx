@@ -5,29 +5,25 @@ import { Link, useNavigate } from 'react-router-dom';
 import { forgotPassword } from '../../api/auth';
 import { setAuthError } from '../../features/authSlice';
 import { AppDispatch } from '../../store';
+import { useForm } from '../../hooks/useForm';
 import styles from './forgot-password.module.scss';
 
 export const ForgotPassword: React.FC = () => {
-  const [email, setEmail] = useState('');
-  const [error, setError] = useState<string | null>(null); // Локальное состояние для ошибок
+  const [form, handleChange] = useForm({ email: '' });
+  const [error, setError] = useState<string | null>(null);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-
-  const onEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.value);
-    setError(null); // Сбрасываем ошибку при изменении поля
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await forgotPassword({ email });
-      localStorage.setItem('forgotPasswordRequested', 'true'); // Сохраняем флаг в localStorage
+      await forgotPassword({ email: form.email });
+      localStorage.setItem('forgotPasswordRequested', 'true');
       navigate('/reset-password');
     } catch (error) {
       const errorMessage = 'Не удалось отправить запрос на восстановление пароля';
       setError(errorMessage);
-      dispatch(setAuthError(errorMessage)); // Сохраняем ошибку в Redux для других компонентов
+      dispatch(setAuthError(errorMessage));
     }
   };
 
@@ -38,8 +34,8 @@ export const ForgotPassword: React.FC = () => {
         <Input
           type="email"
           placeholder="Укажите e-mail"
-          onChange={onEmailChange}
-          value={email}
+          onChange={handleChange}
+          value={form.email}
           name="email"
           extraClass={styles.input}
         />
