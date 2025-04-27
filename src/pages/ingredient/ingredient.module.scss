@@ -1,0 +1,46 @@
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.title {
+  font-size: 36px;
+  margin-bottom: 20px;
+}
+
+.image {
+  width: 100%;
+  max-width: 480px;
+  height: auto;
+  margin-bottom: 20px;
+}
+
+.name {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.details {
+  display: flex;
+  justify-content: space-around;
+  gap: 20px;
+}
+
+.detail {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.detail p {
+  margin: 0;
+}
+
+.error {
+  color: #ff0000;
+  font-size: 24px;
+  text-align: center;
+  margin-top: 40px;
+}

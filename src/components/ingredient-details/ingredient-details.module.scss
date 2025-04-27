@@ -1,0 +1,21 @@
+.container {
+	text-align: center;
+}
+
+.image {
+	width: 480px;
+	height: 240px;
+	object-fit: cover;
+}
+
+.nutrients {
+	display: flex;
+	justify-content: space-between;
+	gap: 20px;
+}
+
+.nutrient {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}

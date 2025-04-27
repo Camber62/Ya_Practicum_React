@@ -1,0 +1,59 @@
+.container {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 180px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .title {
+    font-size: 24px;
+    line-height: 30px;
+    color: #fff;
+    margin-bottom: 40px;
+    text-align: center;
+  }
+  
+  .form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px; // Отступы между полями
+  }
+  
+  .input {
+    width: 100%;
+    max-width: 480px;
+  }
+  
+  .button {
+    width: 100%;
+    max-width: 480px;
+    background: linear-gradient(63.18deg, #801ab3 0%, #4c4cff 100%);
+    border: none;
+    margin-top: 24px;
+    transition: opacity 0.3s ease;
+  
+    &:hover {
+      opacity: 0.85;
+    }
+  }
+  
+  .text {
+    font-size: 16px;
+    line-height: 24px;
+    color: #8585ad;
+    margin-top: 20px;
+    text-align: center;
+  }
+  
+  .link {
+    color: #4c4cff;
+    text-decoration: none;
+  
+    &:hover {
+      text-decoration: underline;
+    }
+  }
