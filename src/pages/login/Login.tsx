@@ -1,17 +1,16 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
 import { Input, PasswordInput, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './login.module.scss';
-import { RootState, AppDispatch } from '../../store';
+import { RootState, useAppDispatch, useAppSelector } from '../../store';
 import { loginUser } from '../../features/authSlice';
 
 export const Login: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { authStatus, authError } = useSelector((state: RootState) => state.auth);
+  const { authStatus, authError } = useAppSelector((state) => state.auth);
 
   const onEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);

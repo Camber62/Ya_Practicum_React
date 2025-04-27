@@ -7,7 +7,11 @@ const checkResponse = (res: Response) => {
   return Promise.reject(`Ошибка ${res.status}`);
 };
 
-const checkSuccess = (res: any) => {
+interface BaseResponse {
+  success: boolean;
+}
+
+const checkSuccess = <T extends BaseResponse>(res: T) => {
   if (res && res.success) {
     return res;
   }
