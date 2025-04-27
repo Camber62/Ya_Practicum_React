@@ -1,0 +1,31 @@
+.card {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
+}
+
+.image {
+	width: 240px;
+	height: 120px;
+	object-fit: contain;
+}
+
+.price {
+	display: flex;
+	align-items: center;
+}
+
+.counter {
+	position: absolute;
+	top: 0;
+	right: 0;
+}
+
+@media (max-width: 768px) {
+	.image {
+		width: 200px;
+		height: 100px;
+	}
+}
