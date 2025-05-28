@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../store';
 import { wsConnect, wsDisconnect } from '../../features/feedSlice';
 import OrderCard from './OrderCard';
 import FeedStats from './FeedStats';
-import Modal from '../modal/modal';
-import OrderDetailsModal from './OrderDetailsModal';
 import styles from './OrderFeed.module.scss';
 import { FeedOrder } from '../../features/feedSlice';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const OrderFeed: React.FC = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
   const { orders, total, totalToday, wsConnected } = useAppSelector((state) => state.feed);
-  const [selectedOrder, setSelectedOrder] = useState<FeedOrder | null>(null);
 
   useEffect(() => {
     dispatch(wsConnect());
@@ -35,11 +35,7 @@ const OrderFeed: React.FC = () => {
   const pending = orders.filter((o) => o.status === 'pending' || o.status === 'created').map((o) => o.number).slice(0, 10);
 
   const handleOrderClick = (order: FeedOrder) => {
-    setSelectedOrder(order);
-  };
-
-  const handleCloseModal = () => {
-    setSelectedOrder(null);
+    navigate(`/feed/${order.number}`, { state: { background: location } });
   };
 
   return (
@@ -53,11 +49,6 @@ const OrderFeed: React.FC = () => {
         </div>
       </section>
       <FeedStats total={total} totalToday={totalToday} done={done} pending={pending} />
-      {selectedOrder && (
-        <Modal onClose={handleCloseModal} title={`Детали заказа #${selectedOrder.number}`}>
-          <OrderDetailsModal order={selectedOrder} onClose={handleCloseModal} />
-        </Modal>
-      )}
     </div>
   );
 };

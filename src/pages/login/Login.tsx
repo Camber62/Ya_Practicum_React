@@ -1,70 +1,78 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { Input, PasswordInput, Button } from '@ya.praktikum/react-developer-burger-ui-components';
+import React, { FC, FormEvent } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '../../store';
+import { loginUser, selectIsAuthenticated } from '../../features/authSlice';
+import { Button, Input } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './login.module.scss';
-import { RootState, useAppDispatch, useAppSelector } from '../../store';
-import { loginUser } from '../../features/authSlice';
 
-export const Login: React.FC = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+export const Login: FC = () => {
+  const [email, setEmail] = React.useState('');
+  const [password, setPassword] = React.useState('');
+  const [showPassword, setShowPassword] = React.useState(false);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { authStatus, authError } = useAppSelector((state) => state.auth);
+  const location = useLocation();
+  const isAuthenticated = useAppSelector(selectIsAuthenticated);
+  const { authError } = useAppSelector((state) => state.auth);
+  const from = location.state?.from?.pathname || '/';
 
-  const onEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.value);
-  };
+  React.useEffect(() => {
+    if (isAuthenticated) {
+      navigate(from, { replace: true });
+    }
+  }, [isAuthenticated, navigate, from]);
 
-  const onPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(e.target.value);
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    dispatch(loginUser({ email, password })).then((result) => {
-      if (result.meta.requestStatus === 'fulfilled') {
-        navigate('/profile');
-      }
-    });
+    dispatch(loginUser({ email, password }));
   };
 
   return (
     <div className={styles.container}>
-      <h2 className={styles.title}>Вход</h2>
-      <form className={styles.form} onSubmit={handleSubmit}>
-        <Input
-          type="email"
-          placeholder="E-mail"
-          onChange={onEmailChange}
-          value={email}
-          name="email"
-          extraClass={styles.input}
-        />
-        <PasswordInput
-          onChange={onPasswordChange}
-          value={password}
-          name="password"
-          extraClass={styles.input}
-          icon="ShowIcon"
-        />
-        <Button htmlType="submit" type="primary" size="large" extraClass={styles.button}>
+      <h2 className="text text_type_main-medium mb-6">Вход</h2>
+      <form onSubmit={handleSubmit} className={styles.form}>
+        <div className="mb-6">
+          <Input
+            type="email"
+            placeholder="E-mail"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            error={!!authError}
+            errorText={authError || undefined}
+            required
+          />
+        </div>
+        <div className="mb-6">
+          <Input
+            type={showPassword ? 'text' : 'password'}
+            placeholder="Пароль"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            icon={showPassword ? 'HideIcon' : 'ShowIcon'}
+            onIconClick={() => setShowPassword(!showPassword)}
+            error={!!authError}
+            errorText={authError || undefined}
+            required
+          />
+        </div>
+        <Button type="primary" size="medium" htmlType="submit">
           Войти
         </Button>
       </form>
-      {authStatus === 'failed' && <p className={styles.error}>{authError}</p>}
-      <p className={styles.text}>
-        Вы — новый пользователь?{' '}
-        <Link to="/register" className={styles.link}>
-          Зарегистрироваться
-        </Link>
-      </p>
-      <p className={styles.text}>
-        Забыли пароль?{' '}
-        <Link to="/forgot-password" className={styles.link}>
-          Восстановить пароль
-        </Link>
-      </p>
+      <div className={`${styles.links} mt-20`}>
+        <p className="text text_type_main-default text_color_inactive">
+          Вы — новый пользователь?{' '}
+          <Link to="/register" className={styles.link}>
+            Зарегистрироваться
+          </Link>
+        </p>
+        <p className="text text_type_main-default text_color_inactive">
+          Забыли пароль?{' '}
+          <Link to="/forgot-password" className={styles.link}>
+            Восстановить пароль
+          </Link>
+        </p>
+      </div>
     </div>
   );
 };

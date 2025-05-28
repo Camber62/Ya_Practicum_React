@@ -23,7 +23,7 @@ const statusClassMap: Record<string, string> = {
   created: styles.status,
 };
 
-const OrderDetailsModal: React.FC<OrderDetailsModalProps> = ({ order, onClose }) => {
+const OrderDetailsModal: React.FC<OrderDetailsModalProps> = ({ order }) => {
   const ingredients = useAppSelector((state) => state.app.ingredients);
   if (!order) {
     return <div>Заказ не найден или загружается...</div>;
@@ -52,7 +52,6 @@ const OrderDetailsModal: React.FC<OrderDetailsModalProps> = ({ order, onClose })
 
   return (
     <div className={styles.container}>
-      <button className={styles.closeBtn} onClick={onClose}>×</button>
       <h2 className={styles.number}>#{order.number}</h2>
       <h3 className={styles.name}>{order.name}</h3>
       <div className={statusClass}>{status}</div>

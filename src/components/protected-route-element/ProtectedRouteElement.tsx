@@ -1,41 +1,32 @@
 import React from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAppSelector } from '../../store';
+import { selectIsAuthenticated } from '../../features/authSlice';
 
-interface ProtectedProps {
-  onlyUnAuth?: boolean;
+interface ProtectedRouteElementProps {
   component: React.ReactElement;
+  onlyUnAuth?: boolean;
 }
 
-const Protected: React.FC<ProtectedProps> = ({ onlyUnAuth = false, component }) => {
-  const { user, isAuthChecked } = useAppSelector((state) => state.auth);
+export const OnlyAuth: React.FC<ProtectedRouteElementProps> = ({ component }) => {
+  const isAuthenticated = useAppSelector(selectIsAuthenticated);
   const location = useLocation();
 
-  // Если проверка авторизации ещё не завершена, показываем загрузку
-  if (!isAuthChecked) {
-    return <p>Loading...</p>;
+  if (!isAuthenticated) {
+    return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
-  // Для авторизованного маршрута, но пользователь не авторизован
-  if (!onlyUnAuth && !user) {
-    return <Navigate to="/login" state={{ from: location }} />;
-  }
-
-  // Для неавторизованного маршрута, но пользователь авторизован
-  if (onlyUnAuth && user) {
-    const { from } = location.state ?? { from: { pathname: '/' } };
-    return <Navigate to={from} />;
-  }
-
-  // Случаи, когда:
-  // - onlyUnAuth && !user (для неавторизованного и не авторизован)
-  // - !onlyUnAuth && user (для авторизованного и авторизован)
   return component;
 };
 
-// Экспортируем два компонента для удобства
-export const OnlyAuth = Protected;
+export const OnlyUnAuth: React.FC<ProtectedRouteElementProps> = ({ component }) => {
+  const isAuthenticated = useAppSelector(selectIsAuthenticated);
+  const location = useLocation();
+  const from = location.state?.from?.pathname || '/';
 
-export const OnlyUnAuth: React.FC<{ component: React.ReactElement }> = ({ component }) => (
-  <Protected onlyUnAuth component={component} />
-);
+  if (isAuthenticated) {
+    return <Navigate to={from} replace />;
+  }
+
+  return component;
+};

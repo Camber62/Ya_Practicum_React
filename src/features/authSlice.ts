@@ -14,6 +14,10 @@ interface AuthState {
   isAuthChecked: boolean;
 }
 
+// Селектор для определения состояния аутентификации
+export const selectIsAuthenticated = (state: { auth: AuthState }) => 
+  state.auth.isAuthChecked && state.auth.user !== null && state.auth.authStatus === 'succeeded';
+
 const initialState: AuthState = {
   user: null,
   authStatus: 'idle',

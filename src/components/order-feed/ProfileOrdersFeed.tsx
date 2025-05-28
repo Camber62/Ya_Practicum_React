@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../store';
 import { wsConnect, wsDisconnect } from '../../features/profileOrdersSlice';
 import OrderCard from './OrderCard';
-import Modal from '../modal/modal';
-import OrderDetailsModal from './OrderDetailsModal';
 import styles from './OrderFeed.module.scss';
 import { ProfileOrder } from '../../features/profileOrdersSlice';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const ProfileOrdersFeed: React.FC = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
   const { orders, wsConnected } = useAppSelector((state) => state.profileOrders);
-  const [selectedOrder, setSelectedOrder] = useState<ProfileOrder | null>(null);
 
   useEffect(() => {
     dispatch(wsConnect());
@@ -30,11 +30,7 @@ const ProfileOrdersFeed: React.FC = () => {
   }
 
   const handleOrderClick = (order: ProfileOrder) => {
-    setSelectedOrder(order);
-  };
-
-  const handleCloseModal = () => {
-    setSelectedOrder(null);
+    navigate(`/profile/orders/${order.number}`, { state: { background: location } });
   };
 
   return (
@@ -47,11 +43,6 @@ const ProfileOrdersFeed: React.FC = () => {
           ))}
         </div>
       </section>
-      {selectedOrder && (
-        <Modal onClose={handleCloseModal} title={`Детали заказа #${selectedOrder.number}`}>
-          <OrderDetailsModal order={selectedOrder} onClose={handleCloseModal} />
-        </Modal>
-      )}
     </div>
   );
 };

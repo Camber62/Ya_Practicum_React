@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { useAppSelector } from '../../store';
 import OrderDetailsModal from './OrderDetailsModal';
 import { FeedOrder } from '../../features/feedSlice';
@@ -26,6 +26,9 @@ interface Props {
 const OrderDetailsContainer: React.FC<Props> = ({ onClose, source = 'feed' }) => {
   const { number } = useParams<{ number: string }>();
   const navigate = useNavigate();
+  const location = useLocation();
+  const background = location.state?.background;
+
   const orderFromStore = useAppSelector((state) => {
     if (source === 'feed') {
       return state.feed.orders.find((o) => o.number === Number(number));
@@ -33,6 +36,7 @@ const OrderDetailsContainer: React.FC<Props> = ({ onClose, source = 'feed' }) =>
       return state.profileOrders.orders.find((o) => o.number === Number(number));
     }
   });
+
   const [order, setOrder] = useState<FeedOrder | null | undefined>(orderFromStore);
   const [loading, setLoading] = useState(false);
 
@@ -48,8 +52,18 @@ const OrderDetailsContainer: React.FC<Props> = ({ onClose, source = 'feed' }) =>
     }
   }, [number, orderFromStore]);
 
+  const handleClose = () => {
+    if (onClose) {
+      onClose();
+    } else if (background) {
+      navigate(background.pathname, { replace: true });
+    } else {
+      navigate(source === 'feed' ? '/feed' : '/profile/orders');
+    }
+  };
+
   if (loading) return <OrderDetailsSkeleton />;
-  return <OrderDetailsModal order={order} onClose={onClose || (() => navigate(source === 'feed' ? '/feed' : '/profile/orders'))} />;
+  return <OrderDetailsModal order={order} onClose={handleClose} />;
 };
 
 export default OrderDetailsContainer; 
