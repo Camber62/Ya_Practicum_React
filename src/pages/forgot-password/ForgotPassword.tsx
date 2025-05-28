@@ -1,6 +1,6 @@
 import { Button, Input } from '@ya.praktikum/react-developer-burger-ui-components';
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useAppDispatch } from '../../store';
 import { Link, useNavigate } from 'react-router-dom';
 import { forgotPassword } from '../../api/auth';
 import { setAuthError } from '../../features/authSlice';
@@ -11,7 +11,7 @@ import styles from './forgot-password.module.scss';
 export const ForgotPassword: React.FC = () => {
   const [form, handleChange] = useForm({ email: '' });
   const [error, setError] = useState<string | null>(null);
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {

@@ -1,17 +1,16 @@
 import { Button, Input, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useAppDispatch } from '../../store';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { resetPassword } from '../../api/auth';
 import { setAuthError } from '../../features/authSlice';
-import { AppDispatch } from '../../store';
 import styles from './reset-password.module.scss';
 
 export const ResetPassword: React.FC = () => {
   const [password, setPassword] = useState('');
   const [token, setToken] = useState('');
   const [error, setError] = useState<string | null>(null); // Локальное состояние для ошибок
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   // Проверяем флаг в localStorage

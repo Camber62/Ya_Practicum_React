@@ -1,17 +1,14 @@
 import React, { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import { useAppDispatch, useAppSelector } from '../../store';
 import { fetchIngredients } from '../../features/appSlice';
-import { AppDispatch, RootState } from '../../store';
 import styles from './ingredient.module.scss';
 
 export const Ingredient: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { ingredients, ingredientsStatus, ingredientsError } = useSelector(
-    (state: RootState) => state.app
-  );
+  const { ingredients, ingredientsStatus, ingredientsError } = useAppSelector((state) => state.app);
 
   useEffect(() => {
     if (ingredients.length === 0 && ingredientsStatus !== 'pending') {

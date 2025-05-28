@@ -1,7 +1,6 @@
 import React from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../store';
+import { useAppSelector } from '../../store';
 
 interface ProtectedProps {
   onlyUnAuth?: boolean;
@@ -9,8 +8,7 @@ interface ProtectedProps {
 }
 
 const Protected: React.FC<ProtectedProps> = ({ onlyUnAuth = false, component }) => {
-  const user = useSelector((state: RootState) => state.auth.user);
-  const isAuthChecked = useSelector((state: RootState) => state.auth.isAuthChecked);
+  const { user, isAuthChecked } = useAppSelector((state) => state.auth);
   const location = useLocation();
 
   // Если проверка авторизации ещё не завершена, показываем загрузку

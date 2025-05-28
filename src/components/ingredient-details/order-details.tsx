@@ -1,6 +1,5 @@
 import React, { FC } from 'react';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../store';
+import { useAppSelector } from '../../store';
 import styles from './order-details.module.scss';
 import { CheckMarkIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 
@@ -15,7 +14,7 @@ interface OrderDetailsProps {
 }
 
 const OrderDetails: FC<OrderDetailsProps> = ({ order }) => {
-  const orderStatus = useSelector((state: RootState) => state.app.orderStatus);
+  const orderStatus = useAppSelector((state) => state.app.orderStatus);
 
   if (orderStatus === 'pending') {
     return (

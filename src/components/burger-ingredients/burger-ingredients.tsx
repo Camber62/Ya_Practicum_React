@@ -1,7 +1,6 @@
 import React, { FC, useRef, useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useAppDispatch, useAppSelector } from '../../store';
 import { useNavigate, useLocation } from 'react-router-dom'; // Добавляем useLocation
-import { AppDispatch, RootState } from '../../store';
 import styles from './burger-ingredients.module.scss';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Ingredient } from '../../types';
@@ -9,11 +8,11 @@ import IngredientCard from './ingredient-card';
 import { setSelectedIngredient, addIngredientToConstructor } from '../../features/appSlice';
 
 const BurgerIngredients: FC = () => {
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const location = useLocation(); // Добавляем хук для получения текущего location
   const [currentTab, setCurrentTab] = useState<string>('bun');
-  const { ingredients } = useSelector((state: RootState) => state.app);
+  const { ingredients } = useAppSelector((state) => state.app);
 
   const bunRef = useRef<HTMLHeadingElement>(null);
   const sauceRef = useRef<HTMLHeadingElement>(null);
@@ -24,7 +23,7 @@ const BurgerIngredients: FC = () => {
   const sauces = ingredients.filter((item) => item.type === 'sauce');
   const mains = ingredients.filter((item) => item.type === 'main');
 
-  const selectedIngredients = useSelector((state: RootState) =>
+  const selectedIngredients = useAppSelector((state) =>
     state.app.constructorData.bun
       ? [state.app.constructorData.bun, ...state.app.constructorData.ingredients, state.app.constructorData.bun]
       : state.app.constructorData.ingredients

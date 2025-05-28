@@ -1,7 +1,6 @@
 import React, { FC } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useAppDispatch, useAppSelector } from '../../store';
 import { useNavigate } from 'react-router-dom';
-import { RootState, AppDispatch } from '../../store';
 import { createOrder, clearConstructor, removeIngredientFromConstructor, moveIngredientInConstructor, addIngredientToConstructor } from '../../features/appSlice';
 import { setAuthError } from '../../features/authSlice'; // Добавляем для установки ошибки
 import styles from './burger-constructor.module.scss';
@@ -19,10 +18,10 @@ const ItemTypes = {
 };
 
 const BurgerConstructor: FC = () => {
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { order, orderStatus, orderError, constructorData } = useSelector((state: RootState) => state.app);
-  const { user } = useSelector((state: RootState) => state.auth);
+  const { order, orderStatus, orderError, constructorData } = useAppSelector((state) => state.app);
+  const { user } = useAppSelector((state) => state.auth);
 
   const { isModalOpen, openModal, closeModal } = useModal();
 

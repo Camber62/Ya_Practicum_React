@@ -1,13 +1,12 @@
 import React from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { BurgerIcon, ListIcon, ProfileIcon, Logo } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useSelector } from 'react-redux'; // Add useSelector to access Redux state
-import { RootState } from '../../store'; // Import RootState for typing
+import { useAppSelector } from '../../store';
 import styles from './header.module.scss';
 
 const Header: React.FC = () => {
   const location = useLocation();
-  const { user } = useSelector((state: RootState) => state.auth); // Get user from auth slice
+  const { user } = useAppSelector((state) => state.auth);
 
   return (
     <header className={styles.header}>
@@ -64,7 +63,7 @@ const Header: React.FC = () => {
               location.pathname.startsWith('/profile') ? styles.activeText : 'text_color_inactive'
             }`}
           >
-            {user ? user.email : 'Личный кабинет'} {/* Show email if user is authenticated */}
+            {user ? user.email : 'Личный кабинет'}
           </p>
         </NavLink>
       </nav>

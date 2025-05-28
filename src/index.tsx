@@ -10,11 +10,13 @@ const domNode = document.getElementById('root') as HTMLDivElement;
 const root = createRoot(domNode);
 
 root.render(
-  <StrictMode>
-    <Provider store={store}>
-      <BrowserRouter> {/* Оберни App в BrowserRouter */}
-        <App />
-      </BrowserRouter>
-    </Provider>
-  </StrictMode>
+	<StrictMode>
+		<Provider store={store}>
+			<BrowserRouter>
+				{' '}
+				{/* Оберни App в BrowserRouter */}
+				<App />
+			</BrowserRouter>
+		</Provider>
+	</StrictMode>
 );

@@ -1,14 +1,13 @@
 import React, { useEffect } from 'react';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useAppDispatch, useAppSelector } from '../../store';
 import styles from './profile.module.scss';
-import { RootState, AppDispatch } from '../../store';
 import { getUserRequest, logoutUser } from '../../features/authSlice';
 
 export const Profile: React.FC = () => {
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { user, authStatus } = useSelector((state: RootState) => state.auth);
+  const { user, authStatus } = useAppSelector((state) => state.auth);
 
   useEffect(() => {
     if (!user) {

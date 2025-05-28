@@ -1,14 +1,11 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../store';
+import { useAppSelector } from '../../store';
 import styles from './home.module.scss';
 import BurgerIngredients from '@components/burger-ingredients/burger-ingredients';
 import BurgerConstructor from '@components/burger-constructor/burger-constructor';
 
 export const Home: React.FC = () => {
-  const { ingredientsStatus, ingredientsError } = useSelector(
-    (state: RootState) => state.app
-  );
+  const { ingredientsStatus, ingredientsError } = useAppSelector((state) => state.app);
 
   const isLoading = ingredientsStatus === 'pending';
   const error = ingredientsError;

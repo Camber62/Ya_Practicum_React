@@ -1,10 +1,10 @@
 import React, { FC } from 'react';
-import { useSelector } from 'react-redux';
+import { useAppSelector } from '../../store';
 import { RootState } from '../../store';
 import styles from './ingredient-details.module.scss';
 
 const IngredientDetails: FC = () => {
-  const ingredient = useSelector((state: RootState) => state.app.selectedIngredient);
+  const ingredient = useAppSelector((state) => state.app.selectedIngredient);
 
   if (!ingredient) {
     return <div className="text text_type_main-medium">Ингредиент не найден</div>;

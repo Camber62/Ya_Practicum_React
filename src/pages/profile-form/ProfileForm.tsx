@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useAppDispatch, useAppSelector } from '../../store';
 import { Input, PasswordInput, Button } from '@ya.praktikum/react-developer-burger-ui-components';
-import { AppDispatch } from '../../store';
 
 import styles from './profile-form.module.scss';
 import { RootState } from '../../store';
 import { updateUserProfile } from '../../features/authSlice';
 
 export const ProfileForm: React.FC = () => {
-  const dispatch = useDispatch<AppDispatch>();
-  const { user, authStatus, authError } = useSelector((state: RootState) => state.auth);
+  const dispatch = useAppDispatch();
+  const { user, authStatus, authError } = useAppSelector((state) => state.auth);
 
   const [name, setName] = useState(user?.name || '');
   const [email, setEmail] = useState(user?.email || '');
