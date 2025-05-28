@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { WebSocketActionTypes } from '../middleware/socketMiddleware';
 
 export interface ProfileOrder {
 	_id: string;
@@ -26,19 +27,34 @@ const initialState: ProfileOrdersState = {
 	error: null,
 };
 
+export const PROFILE_ORDERS_WS_ACTIONS: WebSocketActionTypes = {
+	connect: 'profileOrders/wsConnect',
+	disconnect: 'profileOrders/wsDisconnect',
+	connecting: 'profileOrders/wsConnecting',
+	open: 'profileOrders/wsOpen',
+	close: 'profileOrders/wsClose',
+	error: 'profileOrders/wsError',
+	message: 'profileOrders/wsMessage',
+};
+
 const profileOrdersSlice = createSlice({
 	name: 'profileOrders',
 	initialState,
 	reducers: {
-		wsConnect(state) {
+		wsConnecting(state) {
+			state.wsConnected = false;
+			state.error = null;
+		},
+		wsOpen(state) {
 			state.wsConnected = true;
 			state.error = null;
 		},
-		wsDisconnect(state) {
+		wsClose(state) {
 			state.wsConnected = false;
 		},
 		wsError(state, action: PayloadAction<string>) {
 			state.error = action.payload;
+			state.wsConnected = false;
 		},
 		wsMessage(
 			state,
@@ -52,12 +68,8 @@ const profileOrdersSlice = createSlice({
 			state.total = action.payload.total;
 			state.totalToday = action.payload.totalToday;
 		},
-		wsClose(state) {
-			state.wsConnected = false;
-		},
 	},
 });
 
-export const { wsConnect, wsDisconnect, wsError, wsMessage, wsClose } =
-	profileOrdersSlice.actions;
+export const { wsConnecting, wsOpen, wsClose, wsError, wsMessage } = profileOrdersSlice.actions;
 export default profileOrdersSlice.reducer;

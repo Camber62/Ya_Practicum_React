@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../store';
-import { wsConnect, wsDisconnect } from '../../features/feedSlice';
+import { FEED_WS_ACTIONS } from '../../features/feedSlice';
 import OrderCard from './OrderCard';
 import FeedStats from './FeedStats';
 import styles from './OrderFeed.module.scss';
@@ -14,9 +14,15 @@ const OrderFeed: React.FC = () => {
   const { orders, total, totalToday, wsConnected } = useAppSelector((state) => state.feed);
 
   useEffect(() => {
-    dispatch(wsConnect());
+    dispatch({ 
+      type: FEED_WS_ACTIONS.connect, 
+      payload: { 
+        url: 'wss://norma.nomoreparties.space/orders/all'
+      } 
+    });
+    
     return () => {
-      dispatch(wsDisconnect());
+      dispatch({ type: FEED_WS_ACTIONS.disconnect });
     };
   }, [dispatch]);
 

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../store';
-import { wsConnect, wsDisconnect } from '../../features/profileOrdersSlice';
+import { PROFILE_ORDERS_WS_ACTIONS } from '../../features/profileOrdersSlice';
 import OrderCard from './OrderCard';
 import styles from './OrderFeed.module.scss';
 import { ProfileOrder } from '../../features/profileOrdersSlice';
@@ -11,13 +11,23 @@ const ProfileOrdersFeed: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { orders, wsConnected } = useAppSelector((state) => state.profileOrders);
+  const token = localStorage.getItem('accessToken');
 
   useEffect(() => {
-    dispatch(wsConnect());
+    if (token) {
+      dispatch({ 
+        type: PROFILE_ORDERS_WS_ACTIONS.connect, 
+        payload: { 
+          url: 'wss://norma.nomoreparties.space/orders',
+          token: token.replace('Bearer ', '')
+        } 
+      });
+    }
+    
     return () => {
-      dispatch(wsDisconnect());
+      dispatch({ type: PROFILE_ORDERS_WS_ACTIONS.disconnect });
     };
-  }, [dispatch]);
+  }, [dispatch, token]);
 
   // Loader при загрузке заказов
   if (!wsConnected || orders.length === 0) {
