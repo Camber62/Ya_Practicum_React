@@ -4,7 +4,7 @@ import { Provider } from 'react-redux';
 import { store } from './store';
 import { App } from './app';
 import './styles.css';
-import { BrowserRouter } from 'react-router-dom'; // Import BrowserRouter
+import { BrowserRouter } from 'react-router-dom';
 
 const domNode = document.getElementById('root') as HTMLDivElement;
 const root = createRoot(domNode);

@@ -14,17 +14,22 @@ const OrderFeed: React.FC = () => {
   const { orders, total, totalToday, wsConnected } = useAppSelector((state) => state.feed);
 
   useEffect(() => {
-    dispatch({ 
-      type: FEED_WS_ACTIONS.connect, 
-      payload: { 
-        url: 'wss://norma.nomoreparties.space/orders/all'
-      } 
-    });
+    // Подключаемся только если нет активного подключения
+    if (!wsConnected) {
+      dispatch({ 
+        type: FEED_WS_ACTIONS.connect, 
+        payload: { 
+          url: 'wss://norma.nomoreparties.space/orders/all'
+        } 
+      });
+    }
     
     return () => {
-      dispatch({ type: FEED_WS_ACTIONS.disconnect });
+      if (wsConnected) {
+        dispatch({ type: FEED_WS_ACTIONS.disconnect });
+      }
     };
-  }, [dispatch]);
+  }, [dispatch, wsConnected]);
 
   // Loader при загрузке заказов
   if (!wsConnected || orders.length === 0) {

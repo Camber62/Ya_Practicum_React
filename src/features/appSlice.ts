@@ -44,6 +44,7 @@ interface ConstructorData {
 
 interface AppState {
   ingredients: Ingredient[];
+  ingredientsMap: Map<string, Ingredient>;
   ingredientsStatus: 'idle' | 'pending' | 'succeeded' | 'failed';
   ingredientsError: string | null;
   constructorData: ConstructorData;
@@ -55,6 +56,7 @@ interface AppState {
 
 const initialState: AppState = {
   ingredients: [],
+  ingredientsMap: new Map(),
   ingredientsStatus: 'idle',
   ingredientsError: null,
   constructorData: {
@@ -102,6 +104,12 @@ export const appSlice = createSlice({
       state.orderError = null;
       state.order = null;
     },
+    setIngredients(state, action: PayloadAction<Ingredient[]>) {
+      state.ingredients = action.payload;
+      state.ingredientsMap = new Map(
+        action.payload.map(ingredient => [ingredient._id, ingredient])
+      );
+    },
   },
   extraReducers: builder => {
     builder
@@ -112,6 +120,9 @@ export const appSlice = createSlice({
       })
       .addCase(fetchIngredients.fulfilled, (state, action: PayloadAction<Ingredient[]>) => {
         state.ingredients = action.payload;
+        state.ingredientsMap = new Map(
+          action.payload.map(ingredient => [ingredient._id, ingredient])
+        );
         state.ingredientsStatus = 'succeeded';
         state.ingredientsError = null;
       })
@@ -145,6 +156,7 @@ export const {
   setSelectedIngredient,
   clearConstructor,
   resetOrderStatus,
+  setIngredients,
 } = appSlice.actions;
 
 export default appSlice.reducer;

@@ -14,7 +14,8 @@ const ProfileOrdersFeed: React.FC = () => {
   const token = localStorage.getItem('accessToken');
 
   useEffect(() => {
-    if (token) {
+    // Подключаемся только если нет активного подключения и есть токен
+    if (!wsConnected && token) {
       dispatch({ 
         type: PROFILE_ORDERS_WS_ACTIONS.connect, 
         payload: { 
@@ -25,9 +26,11 @@ const ProfileOrdersFeed: React.FC = () => {
     }
     
     return () => {
-      dispatch({ type: PROFILE_ORDERS_WS_ACTIONS.disconnect });
+      if (wsConnected) {
+        dispatch({ type: PROFILE_ORDERS_WS_ACTIONS.disconnect });
+      }
     };
-  }, [dispatch, token]);
+  }, [dispatch, token, wsConnected]);
 
   // Loader при загрузке заказов
   if (!wsConnected || orders.length === 0) {
