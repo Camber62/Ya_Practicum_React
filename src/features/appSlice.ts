@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Ingredient, SelectedIngredient } from '../types';
 import { API } from '../api';
 
-export const fetchIngredients = createAsyncThunk(
+export const fetchIngredients = createAsyncThunk<Ingredient[], void, { rejectValue: string }>(
 	'appSlice/fetchIngredients',
 	async (_, { rejectWithValue }) => {
 		try {
@@ -45,7 +45,7 @@ interface ConstructorData {
 	ingredients: SelectedIngredient[];
 }
 
-interface AppState {
+export interface AppState {
 	ingredients: Ingredient[];
 	ingredientsMap: Record<string, Ingredient>;
 	ingredientsStatus: 'idle' | 'pending' | 'succeeded' | 'failed';
