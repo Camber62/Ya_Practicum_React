@@ -31,6 +31,7 @@ const IngredientCard: FC<IngredientCardProps> = ({ ingredient, count, onClick })
 	// Рендеринг карточки ингредиента
 	return (
 		<li
+			data-testid="ingredient-item"
 			className={`${styles.card} mb-8`}
 			onClick={() => onClick(ingredient)}
 			ref={drag}

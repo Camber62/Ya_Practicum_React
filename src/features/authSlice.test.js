@@ -9,27 +9,15 @@ import authReducer, {
   selectIsAuthenticated,
 } from './authSlice';
 
-interface User {
-  email: string;
-  name: string;
-}
-
-interface AuthState {
-  user: User | null;
-  authStatus: 'idle' | 'pending' | 'succeeded' | 'failed';
-  authError: string | null;
-  isAuthChecked: boolean;
-}
-
 describe('authSlice', () => {
-  const initialState: AuthState = {
+  const initialState = {
     user: null,
     authStatus: 'idle',
     authError: null,
     isAuthChecked: false,
   };
 
-  const mockUser: User = {
+  const mockUser = {
     email: 'test@example.com',
     name: 'Test User',
   };
@@ -188,23 +176,23 @@ describe('authSlice', () => {
 
   describe('selectors', () => {
     it('should select isAuthenticated correctly', () => {
-      const state = { 
-        auth: { 
-          user: mockUser, 
-          authStatus: 'succeeded' as const,
+      const state = {
+        auth: {
+          user: mockUser,
+          authStatus: 'succeeded',
           authError: null,
-          isAuthChecked: true
-        } 
+          isAuthChecked: true,
+        },
       };
       expect(selectIsAuthenticated(state)).toBe(true);
 
-      const stateWithoutUser = { 
-        auth: { 
-          user: null, 
-          authStatus: 'succeeded' as const,
+      const stateWithoutUser = {
+        auth: {
+          user: null,
+          authStatus: 'succeeded',
           authError: null,
-          isAuthChecked: true
-        } 
+          isAuthChecked: true,
+        },
       };
       expect(selectIsAuthenticated(stateWithoutUser)).toBe(false);
     });

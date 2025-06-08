@@ -39,6 +39,7 @@ export const Login: FC = () => {
             onChange={(e) => setEmail(e.target.value)}
             error={!!authError}
             errorText={authError || undefined}
+            name="email"
             required
           />
         </div>
@@ -52,6 +53,7 @@ export const Login: FC = () => {
             onIconClick={() => setShowPassword(!showPassword)}
             error={!!authError}
             errorText={authError || undefined}
+            name="password"
             required
           />
         </div>

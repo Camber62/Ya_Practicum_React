@@ -8,17 +8,10 @@ import appReducer, {
   setIngredients,
   fetchIngredients,
   createOrder,
-  AppState,
 } from './appSlice';
-import { Ingredient, SelectedIngredient } from '../types';
-
-interface AsyncActionMeta {
-  requestId: string;
-  arg: void | { ingredients: string[]; token: string };
-}
 
 describe('appSlice', () => {
-  const initialState: AppState = {
+  const initialState = {
     ingredients: [],
     ingredientsMap: {},
     ingredientsStatus: 'idle',
@@ -33,7 +26,7 @@ describe('appSlice', () => {
     orderError: null,
   };
 
-  const mockIngredient: Ingredient = {
+  const mockIngredient = {
     _id: '1',
     name: 'Test Ingredient',
     type: 'main',
@@ -48,7 +41,7 @@ describe('appSlice', () => {
     __v: 0,
   };
 
-  const mockSelectedIngredient: SelectedIngredient = {
+  const mockSelectedIngredient = {
     ...mockIngredient,
     uniqueId: '123',
   };
@@ -61,7 +54,7 @@ describe('appSlice', () => {
 
   describe('reducers', () => {
     it('should handle addIngredientToConstructor with bun', () => {
-      const bunIngredient: SelectedIngredient = {
+      const bunIngredient = {
         ...mockSelectedIngredient,
         type: 'bun',
       };
@@ -83,7 +76,7 @@ describe('appSlice', () => {
     });
 
     it('should handle removeIngredientFromConstructor', () => {
-      const state: AppState = {
+      const state = {
         ...initialState,
         constructorData: {
           bun: null,
@@ -95,9 +88,9 @@ describe('appSlice', () => {
     });
 
     it('should handle moveIngredientInConstructor', () => {
-      const ingredient1: SelectedIngredient = { ...mockSelectedIngredient, uniqueId: '1' };
-      const ingredient2: SelectedIngredient = { ...mockSelectedIngredient, uniqueId: '2' };
-      const state: AppState = {
+      const ingredient1 = { ...mockSelectedIngredient, uniqueId: '1' };
+      const ingredient2 = { ...mockSelectedIngredient, uniqueId: '2' };
+      const state = {
         ...initialState,
         constructorData: {
           bun: null,
@@ -120,7 +113,7 @@ describe('appSlice', () => {
     });
 
     it('should handle clearConstructor', () => {
-      const state: AppState = {
+      const state = {
         ...initialState,
         constructorData: {
           bun: mockSelectedIngredient,
@@ -135,7 +128,7 @@ describe('appSlice', () => {
     });
 
     it('should handle resetOrderStatus', () => {
-      const state: AppState = {
+      const state = {
         ...initialState,
         orderStatus: 'succeeded',
         orderError: 'error',

@@ -4,16 +4,15 @@ import feedReducer, {
   wsClose,
   wsError,
   wsMessage,
-  FeedOrder,
 } from './feedSlice';
 
 describe('feedSlice', () => {
   const initialState = {
-    orders: [] as FeedOrder[],
+    orders: [],
     total: 0,
     totalToday: 0,
     wsConnected: false,
-    error: null as string | null,
+    error: null,
   };
 
   describe('initial state', () => {
@@ -36,7 +35,7 @@ describe('feedSlice', () => {
     });
 
     it('should handle wsClose', () => {
-      const state = { ...initialState, wsConnected: true };
+      const state = { ...initialState, wsConnected: true, error: null };
       const nextState = feedReducer(state, wsClose());
       expect(nextState.wsConnected).toBe(false);
       expect(nextState.error).toBeNull();

@@ -36,7 +36,7 @@ const DraggableFilling: FC<{
 	drag(drop(ref));
 
 	return (
-		<li ref={ref} style={{ opacity: isDragging ? 0.5 : 1 }}>
+		<li ref={ref} style={{ opacity: isDragging ? 0.5 : 1 }} data-testid="constructor-ingredients">
 			<DragIcon type="primary" />
 			<ConstructorElement
 				text={item.name}

@@ -119,17 +119,19 @@ const BurgerConstructor: FC = () => {
   };
 
   return (
-    <section className={styles.burgerConstructor} ref={drop}>
+    <section className={styles.burgerConstructor} ref={drop} data-testid="constructor-drop-target">
       {/* Верхняя булка или заглушка */}
       <div className="mb-4">
         {topBun ? (
-          <ConstructorElement
-            type="top"
-            isLocked={true}
-            text={`${topBun.name} (верх)`}
-            price={topBun.price}
-            thumbnail={topBun.image}
-          />
+          <div data-testid="constructor-bun">
+            <ConstructorElement
+              type="top"
+              isLocked={true}
+              text={`${topBun.name} (верх)`}
+              price={topBun.price}
+              thumbnail={topBun.image}
+            />
+          </div>
         ) : (
           <div
             className={`${styles.placeholder} ${styles.placeholderTop} ${
@@ -170,13 +172,15 @@ const BurgerConstructor: FC = () => {
       {/* Нижняя булка или заглушка */}
       <div className="mb-10 mt-4">
         {bottomBun ? (
-          <ConstructorElement
-            type="bottom"
-            isLocked={true}
-            text={`${bottomBun.name} (низ)`}
-            price={bottomBun.price}
-            thumbnail={bottomBun.image}
-          />
+          <div data-testid="constructor-bun">
+            <ConstructorElement
+              type="bottom"
+              isLocked={true}
+              text={`${bottomBun.name} (низ)`}
+              price={bottomBun.price}
+              thumbnail={bottomBun.image}
+            />
+          </div>
         ) : (
           <div
             className={`${styles.placeholder} ${styles.placeholderBottom} ${
@@ -219,7 +223,7 @@ const BurgerConstructor: FC = () => {
         </Modal>
       )}
       {orderError && (
-        <p className={styles.error}>{orderError}</p>
+        <p className={styles.error} data-testid="error-message">{orderError}</p>
       )}
     </section>
   );

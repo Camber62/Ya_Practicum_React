@@ -4,12 +4,10 @@ import reducer, {
   wsClose,
   wsError,
   wsMessage,
-  ProfileOrdersState,
-  ProfileOrder
 } from './profileOrdersSlice';
 
 describe('profileOrdersSlice', () => {
-  const initialState: ProfileOrdersState = {
+  const initialState = {
     orders: [],
     total: 0,
     totalToday: 0,
@@ -36,7 +34,7 @@ describe('profileOrdersSlice', () => {
   });
 
   it('should handle wsClose', () => {
-    const prevState = { ...initialState, wsConnected: true };
+    const prevState = { ...initialState, wsConnected: true, error: null };
     const nextState = reducer(prevState, wsClose());
     expect(nextState.wsConnected).toBe(false);
   });
@@ -50,7 +48,7 @@ describe('profileOrdersSlice', () => {
   });
 
   it('should handle wsMessage', () => {
-    const orders: ProfileOrder[] = [
+    const orders = [
       {
         _id: '1',
         number: 1,

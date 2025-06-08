@@ -28,7 +28,7 @@ const Modal: FC<ModalProps> = ({ title, onClose, children }) => {
   const modalRoot = document.getElementById('modal-root') as HTMLElement;
 
   return ReactDOM.createPortal(
-    <div className={styles.modal}>
+    <div className={styles.modal} data-testid="modal">
       <ModalOverlay onClose={onClose} />
       <div className={styles.content}>
         {title && (
@@ -36,7 +36,7 @@ const Modal: FC<ModalProps> = ({ title, onClose, children }) => {
             {title}
           </h2>
         )}
-        <button className={styles.closeButton} onClick={onClose} aria-label="Закрыть">
+        <button className={styles.closeButton} onClick={onClose} aria-label="Закрыть" data-testid="modal-close-button">
           <CloseIcon type="primary" />
         </button>
         {children}
