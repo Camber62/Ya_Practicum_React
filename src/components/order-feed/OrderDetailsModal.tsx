@@ -51,7 +51,7 @@ const OrderDetailsModal: React.FC<OrderDetailsModalProps> = ({ order }) => {
   const statusClass = statusClassMap[order.status] || styles.status;
 
   return (
-    <div className={styles.container}>
+    <>
       <h2 className={styles.number}>#{order.number}</h2>
       <h3 className={styles.name}>{order.name}</h3>
       <div className={statusClass}>{status}</div>
@@ -74,7 +74,7 @@ const OrderDetailsModal: React.FC<OrderDetailsModalProps> = ({ order }) => {
         <span className={styles.time}>{timeString}</span>
         <span className={styles.total}>{total} <CurrencyIcon type="primary" /></span>
       </div>
-    </div>
+    </>
   );
 };
 

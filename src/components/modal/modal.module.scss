@@ -19,6 +19,15 @@
 	width: 100%;
 	box-sizing: border-box;
 	z-index: 1002; /* Контент выше оверлея */
+	max-height: 80vh;
+	overflow-y: auto;
+	/* Скрыть скроллбар для Webkit (Chrome, Safari) */
+	scrollbar-width: none; /* Firefox */
+	-ms-overflow-style: none; /* IE и Edge */
+  }
+  
+  .content::-webkit-scrollbar {
+	display: none;
   }
   
   .title {
