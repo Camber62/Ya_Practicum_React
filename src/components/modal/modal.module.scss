@@ -1,0 +1,47 @@
+.modal {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	z-index: 1001; /* Модальное окно выше оверлея */
+  }
+  
+  .content {
+	background: #1c1c21;
+	border-radius: 40px;
+	padding: 40px 40px 60px;
+	position: relative;
+	max-width: 720px;
+	width: 100%;
+	box-sizing: border-box;
+	z-index: 1002; /* Контент выше оверлея */
+	max-height: 80vh;
+	overflow-y: auto;
+	/* Скрыть скроллбар для Webkit (Chrome, Safari) */
+	scrollbar-width: none; /* Firefox */
+	-ms-overflow-style: none; /* IE и Edge */
+  }
+  
+  .content::-webkit-scrollbar {
+	display: none;
+  }
+  
+  .title {
+	margin: 0 0 40px 0;
+  }
+  
+  .closeButton {
+	position: absolute;
+	top: 60px;
+	right: 40px;
+	background: none;
+	border: none;
+	cursor: pointer;
+	padding: 0;
+	display: flex;
+	align-items: center;
+  }

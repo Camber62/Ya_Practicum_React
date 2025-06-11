@@ -8,4 +8,12 @@ module.exports = {
 	useTabs: true,
 	tabWidth: 2,
 	endOfLine: 'auto',
+	arrowParens: 'always',
+	bracketSpacing: true,
+	htmlWhitespaceSensitivity: 'css',
+	insertPragma: false,
+	proseWrap: 'preserve',
+	quoteProps: 'as-needed',
+	requirePragma: false,
+	vueIndentScriptAndStyle: false,
 };
