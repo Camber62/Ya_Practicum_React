@@ -133,9 +133,13 @@ const AppRouter: React.FC = () => {
 					<Route
 						path='/profile/orders/:number'
 						element={
-							<Modal onClose={handleCloseModal}>
-								<OrderDetailsContainer source='profileOrders' />
-							</Modal>
+							<OnlyAuth
+								component={
+									<Modal onClose={handleCloseModal}>
+										<OrderDetailsContainer source='profileOrders' />
+									</Modal>
+								}
+							/>
 						}
 					/>
 				</Routes>
