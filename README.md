@@ -1,70 +1,59 @@
-# React Webpack Starter
+# Ya_Practicum_React
 
-Проект React с настройкой для деплоя на GitHub Pages.
+Добро пожаловать в учебный проект React!
 
-## Установка и запуск
+**Демо:** [https://camber62.github.io/Ya_Practicum_React/](https://camber62.github.io/Ya_Practicum_React/)
+
+## О проекте
+
+Это учебное приложение на React с использованием TypeScript, Redux Toolkit, React Router, Webpack и других современных технологий. Проект предназначен для практики и демонстрации навыков фронтенд-разработки.
+
+## Быстрый старт
 
 ```bash
-# Установка зависимостей
+# Установите зависимости
 npm install
 
-# Запуск в режиме разработки
+# Запустите проект в режиме разработки
 npm start
 
-# Сборка для продакшена
+# Соберите проект для продакшена
 npm run build
 
-# Деплой на GitHub Pages
+# Задеплойте на GitHub Pages
 npm run deploy
 ```
 
-## Настройка для GitHub Pages
+## Деплой на GitHub Pages
 
-### 1. Обновите homepage в package.json
+- Сайт публикуется по адресу: https://camber62.github.io/Ya_Practicum_React/
+- Для корректной работы роутинга используется `basename` в `BrowserRouter`.
 
-Замените `[ваше-имя-пользователя]` и `[имя-репозитория]` на ваши данные:
+## Важно для роутинга
 
-```json
-{
-  "homepage": "https://ваше-имя-пользователя.github.io/имя-репозитория"
-}
-```
-
-### 2. Настройте GitHub Pages
-
-1. Перейдите в настройки репозитория на GitHub
-2. Найдите раздел "Pages" в боковом меню
-3. В разделе "Source" выберите "Deploy from a branch"
-4. Выберите ветку `gh-pages` и папку `/ (root)`
-5. Нажмите "Save"
-
-### 3. Деплой
-
-После настройки, каждый push в ветку `main` или `master` будет автоматически деплоить проект на GitHub Pages.
-
-Для ручного деплоя используйте:
-
-```bash
-npm run deploy
-```
+- Главная страница и все маршруты работают только по адресу `/Ya_Practicum_React/`.
+- Если вы видите 404 при обновлении страницы или при прямом переходе по ссылке — убедитесь, что путь начинается с `/Ya_Practicum_React/`.
+- Для локальной разработки всё работает как обычно на `localhost:8080`.
 
 ## Структура проекта
 
 ```
 ├── src/                 # Исходный код
-├── public/             # Статические файлы
-├── dist/               # Собранный проект (создается после build)
-├── webpack/            # Конфигурация webpack
-└── .github/workflows/  # GitHub Actions
+├── public/              # Статические файлы
+├── dist/                # Собранный проект (создается после build)
+├── webpack/             # Конфигурация webpack
+└── .github/workflows/   # GitHub Actions для автодеплоя
 ```
 
 ## Технологии
 
 - React 18
 - TypeScript
-- Webpack 5
 - Redux Toolkit
 - React Router
+- Webpack 5
 - SASS
 - Jest + Testing Library
-- Cypress 
+- Cypress
+
+---
