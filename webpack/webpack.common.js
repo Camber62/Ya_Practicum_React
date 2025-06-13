@@ -13,7 +13,7 @@ module.exports = {
     filename: production
       ? 'static/scripts/[name].[contenthash].js'
       : 'static/scripts/[name].js',
-    publicPath: '/', // Гарантирует абсолютные пути для всех ресурсов
+    publicPath: production ? './' : '/', // Используем относительные пути для production (GitHub Pages)
     clean: true, // Очищает папку dist перед сборкой
   },
   module: {
@@ -85,7 +85,7 @@ module.exports = {
   plugins: [
     new HTMLWebpackPlugin({
       template: path.resolve(__dirname, '..', './public/index.html'),
-      publicPath: '/', // Указываем publicPath для HTMLWebpackPlugin
+      publicPath: production ? './' : '/', // Указываем publicPath для HTMLWebpackPlugin
     }),
     new CleanWebpackPlugin(),
     new MiniCssExtractPlugin({
