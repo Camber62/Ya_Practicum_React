@@ -1,36 +1,169 @@
-import { clsx } from 'clsx';
-import { useState } from 'react';
-import s from './app.module.scss';
-import reactLogo from './assets/react.svg';
-import { ReactComponent as TypescriptLogo } from './assets/typescript.svg';
-import { add } from '@utils/one';
-import { AppHeader } from '@components/app-header/app-header';
+import Header from '@components/header/header';
+import React, { useEffect } from 'react';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
+import { useAppDispatch, useAppSelector } from '../store';
+import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
+import { fetchIngredients, setSelectedIngredient } from '../features/appSlice';
+import HomePage from '../pages/home/Home';
+import { Login } from '../pages/login/Login';
+import { Register } from '../pages/register/Register';
+import { ResetPassword } from '../pages/reset-password/ResetPassword';
+import { ForgotPassword } from '@pages/forgot-password/ForgotPassword';
+import { ProfileForm } from '@pages/profile-form/ProfileForm';
+import { Profile } from '@pages/profile/Profile';
+import { Ingredient } from '../pages/ingredient/Ingredient';
+import { getUserRequest } from '../features/authSlice';
+import IngredientDetails from '@components/ingredient-details/ingredient-details';
+import Modal from '@components/modal/modal';
+import {
+	OnlyAuth,
+	OnlyUnAuth,
+} from '@components/protected-route-element/ProtectedRouteElement';
+import OrderFeed from '../components/order-feed/OrderFeed';
+import OrderDetailsContainer from '../components/order-feed/OrderDetailsContainer';
+import ProfileOrdersFeed from '../components/order-feed/ProfileOrdersFeed';
 
-export const App = () => {
-	// const num = 0
-	const [count, setCount] = useState(0);
+const AppRouter: React.FC = () => {
+	const location = useLocation();
+	const navigate = useNavigate();
+	const dispatch = useAppDispatch();
+	const {
+		ingredients,
+		ingredientsStatus,
+		ingredientsError,
+		selectedIngredient,
+	} = useAppSelector((state) => state.app);
+	const background = location.state?.background;
+
+	useEffect(() => {
+		const ingredientId = location.pathname.split('/ingredients/')[1];
+		if (
+			ingredientId &&
+			ingredientsStatus === 'succeeded' &&
+			!selectedIngredient
+		) {
+			const ingredient = ingredients.find((item) => item._id === ingredientId);
+			if (ingredient) {
+				dispatch(setSelectedIngredient(ingredient));
+			} else {
+				navigate('/', { replace: true });
+			}
+		}
+	}, [
+		location.pathname,
+		ingredients,
+		ingredientsStatus,
+		selectedIngredient,
+		dispatch,
+		navigate,
+	]);
+
+	useEffect(() => {
+		if (ingredientsStatus === 'failed') {
+			console.error('Failed to load ingredients:', ingredientsError);
+			navigate('/', { replace: true });
+		}
+	}, [ingredientsStatus, ingredientsError, navigate]);
+
+	const handleCloseModal = () => {
+		navigate(background?.pathname || '/', { replace: true });
+	};
 
 	return (
-		<div className='page'>
-			<AppHeader />
-			<div className='logo-wrapper'>
-				<a href='https://reactjs.org' target='_blank' rel='noreferrer'>
-					<img
-						src={reactLogo}
-						className={clsx(s.logo, s.react)}
-						alt={`React logo ${add(2, 5)}`}
+		<>
+			<Routes location={background || location}>
+				<Route path='/' element={<HomePage />} />
+				<Route
+					path='/ingredients/:id'
+					element={
+						ingredientsStatus === 'pending' ? (
+							<div>Загрузка...</div>
+						) : (
+							<Ingredient />
+						)
+					}
+				/>
+				<Route path='/feed' element={<OrderFeed />} />
+				<Route
+					path='/feed/:number'
+					element={<OrderDetailsContainer source='feed' />}
+				/>
+				<Route path='/login' element={<OnlyUnAuth component={<Login />} />} />
+				<Route
+					path='/register'
+					element={<OnlyUnAuth component={<Register />} />}
+				/>
+				<Route
+					path='/forgot-password'
+					element={<OnlyUnAuth component={<ForgotPassword />} />}
+				/>
+				<Route
+					path='/reset-password'
+					element={<OnlyUnAuth component={<ResetPassword />} />}
+				/>
+				<Route path='/profile' element={<OnlyAuth component={<Profile />} />}>
+					<Route index element={<ProfileForm />} />
+					<Route path='orders' element={<ProfileOrdersFeed />} />
+					<Route
+						path='orders/:number'
+						element={<OrderDetailsContainer source='profileOrders' />}
 					/>
-				</a>
-				<a href='https://vitejs.dev' target='_blank' rel='noreferrer'>
-					<TypescriptLogo className={s.logo} />
-				</a>
-			</div>
-			<h1>React + TS</h1>
-			<div className={s.card}>
-				<button onClick={() => setCount((count) => count + 1)}>
-					count is {count}
-				</button>
-			</div>
-		</div>
+				</Route>
+			</Routes>
+
+			{background && (
+				<Routes>
+					<Route
+						path='/ingredients/:id'
+						element={
+							<Modal title='Детали ингредиента' onClose={handleCloseModal}>
+								<IngredientDetails />
+							</Modal>
+						}
+					/>
+					<Route
+						path='/feed/:number'
+						element={
+							<Modal onClose={handleCloseModal}>
+								<OrderDetailsContainer source='feed' />
+							</Modal>
+						}
+					/>
+					<Route
+						path='/profile/orders/:number'
+						element={
+							<OnlyAuth
+								component={
+									<Modal onClose={handleCloseModal}>
+										<OrderDetailsContainer source='profileOrders' />
+									</Modal>
+								}
+							/>
+						}
+					/>
+				</Routes>
+			)}
+		</>
 	);
 };
+
+export const App: React.FC = () => {
+	const dispatch = useAppDispatch();
+
+	useEffect(() => {
+		dispatch(fetchIngredients());
+		dispatch(getUserRequest());
+	}, [dispatch]);
+
+	return (
+		<DndProvider backend={HTML5Backend}>
+			<div className='page'>
+				<Header />
+				<AppRouter />
+			</div>
+		</DndProvider>
+	);
+};
+
+export default App;
